@@ -1,0 +1,231 @@
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Image;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
+class GamePanel extends JPanel implements KeyListener, MouseListener, ActionListener
+{
+    private Image boyDown1; // boy down version 1
+    private Image boyDown2; // boy down version 2
+    private Image boyDown3;
+    
+    private Image boyLeft1; // boy left version 1
+    private Image boyLeft2; // boy left version 2
+
+    private Image boyRight1; // boy right version 1
+    private Image boyRight2; // boy right version 2
+
+    private Image boyUp1; // boy up version 1
+    private Image boyUp2; // boy up version 2
+    private Image boyUp3;
+    
+    private Image character; // holds character
+    
+    private int xPos; // xPos of image
+    private int yPos; // yPos of image
+    
+    private int rCount; // Counter of arrow clicks
+    private int lCount; // Counter of arrow clicks
+    private int dCount; // Counter of arrow clicks
+    private int uCount; // Counter of arrow clicks
+    private int velocity; // used for sprint
+    
+    private Timer timer;
+    
+    private int spriteNum;
+    private int spriteCounter;
+    private String direction;
+
+    public GamePanel(CardLayout cardsIn, CardHolder panelHolderIn)
+    {
+		rCount = lCount = dCount = uCount = 0;
+		xPos = yPos = 0;
+		spriteNum = 1;
+		spriteCounter = 0;
+		direction = "";
+		
+        CardLayout cards = cardsIn;
+        CardHolder panelHolder = panelHolderIn;
+       
+        boyUp1 = getImage("Player_Up1.png");
+        boyUp2 = getImage("Player_Up2.png");
+        boyUp3 = getImage("Player_Up3.png");
+        
+        boyDown1 = getImage("Player_Down1.png");
+        boyDown2 = getImage("Player_Down2.png");
+        boyDown3 = getImage("Player_Down3.png");
+        
+        boyLeft1 = getImage("Player_Left1.png");
+        boyLeft2 = getImage("Player_Left2.png");
+        
+        boyRight1 = getImage("Player_Right1.png");
+        boyRight2 = getImage("Player_Right2.png");
+        character = boyUp1;
+        
+        addKeyListener(this);
+        addMouseListener(this);
+    }
+    
+    public Image getImage(String fileName)
+    {
+        Image picture = null;
+        File pictFile = new File(fileName);
+        try
+        {
+            picture = ImageIO.read(pictFile);
+        }
+        catch(IOException e)
+        {
+            System.err.println("/n/nERROR: " + fileName + " can't be found./n/n");
+            e.printStackTrace();
+        }
+        return picture;
+    }
+    
+    public void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+        setBackground(Color.GREEN);
+        
+        switch (direction)
+        {
+			case ("up"):
+				if (spriteNum == 1)
+					character = boyUp2;
+				if (spriteNum == 2)
+					character = boyUp1;
+				break;
+			case ("down"):
+				if (spriteNum == 1)
+					character = boyDown1;
+				if (spriteNum == 2)
+					character = boyDown2;
+				break;
+			case ("right"):
+				if (spriteNum == 1)
+					character = boyRight2;
+				if (spriteNum == 2)
+					character = boyRight1;
+				break;
+			case ("left"):
+				if (spriteNum == 1)
+					character = boyLeft2;
+				if (spriteNum == 2)
+					character = boyLeft1;
+				break;
+		}
+        g.drawImage(character, xPos, yPos, 100, 100, this); //Default Image
+        
+        spriteCounter++;
+        if (spriteCounter > 5) 
+        {
+			if (spriteNum == 1)
+				spriteNum = 2;
+			else if (spriteNum == 2)
+				spriteNum = 1;
+			spriteCounter = 0;
+		}
+    }
+	
+	public void keyPressed(KeyEvent evt)
+	{
+		int key = evt.getKeyCode();
+		if (key == KeyEvent.VK_SHIFT)
+		{
+			if (evt.isShiftDown())
+			{
+				velocity = 5;
+			}
+			else
+				velocity = 0;
+		}
+		
+		if (key == KeyEvent.VK_UP)
+		{
+			if (!evt.isShiftDown())
+				velocity = 0;
+			yPos -= 5;
+			direction = "up";
+			yPos -= velocity;
+			repaint();
+		}
+		if (key == KeyEvent.VK_RIGHT)
+		{ 
+			if (!evt.isShiftDown())
+				velocity = 0;
+			xPos += 5;
+			xPos += velocity;
+			direction = "right";
+			repaint();
+		}
+		if (key == KeyEvent.VK_DOWN)
+		{
+			if (!evt.isShiftDown())
+				velocity = 0;
+			yPos += 5;
+			yPos += velocity;
+			direction = "down";
+			repaint();
+		}
+		if (key == KeyEvent.VK_LEFT)
+		{
+			if (!evt.isShiftDown())
+				velocity = 0;
+			xPos -= 5;
+			xPos -= velocity;
+			direction = "left";
+			System.out.println(xPos);
+			repaint();
+		}
+	}
+
+	public void keyReleased(KeyEvent ke) {}
+	
+	public void keyTyped(KeyEvent ke) {}
+	
+	public void mousePressed(MouseEvent me)
+	{
+		System.out.println("/mousePressed");
+		requestFocusInWindow();
+	}
+	
+	public void mouseExited(MouseEvent me)	{}
+	public void mouseClicked(MouseEvent me)	{}
+	public void mouseReleased(MouseEvent me)	{}
+	public void mouseEntered(MouseEvent me) {}
+	public void actionPerformed(ActionEvent evt) {}
+}
+
