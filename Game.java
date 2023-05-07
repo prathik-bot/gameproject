@@ -1,3 +1,13 @@
+// Prathik Kumar and Hrithik Mallireddy
+// 4/24/2023
+// Game.java (Explorador Español)
+// Working on:
+	// Week 1: Basic Start, Instructions, and Game panels with navigation CardLayout and null layout complete
+		// Navigation between panels are all working well, and we need to fill in the template we have laid out
+	// Hrithik was absent for most of Week 1 so Prathik did most of the program so far.
+// Practicing: ImageIO, Components(JButtons, MenuBar), and different layouts, like border,
+// grid, and flow layout. Practicing using handler classes as well
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -33,6 +43,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+// Game holds the main panel and calls the panel class, CardHolder.
+/// Prathik Kumar wrote this class.
 public class Game
 {
 	public static void main(String[] args) 
@@ -54,8 +66,14 @@ public class Game
 	}
 }
 
+// CardHolder calls all the other constructors and passes the CardLayout
+// and an instance of this class so that we can manuever to different panels
+// from every class in this program.
+/// Prathik Kumar wrote this class.
 class CardHolder extends JPanel
 {
+	// Calls all the other classes/panels, and passes the card layout object
+	// and an instance of the class so every class can move between the panels
 	public CardHolder()
 	{
 		CardLayout cards = new CardLayout();
@@ -87,12 +105,20 @@ class CardHolder extends JPanel
 	}
 }
 
+// Starting contains the home panel of our game. This panel contains all the
+// other buttons that lead to the other panels in the program (settings, lessons
+// instructions, leaderboard, play, quit). 
+/// Prathik Kumar wrote most of the constructor but Hrithik Mallireddy wrote the
+/// ImageIO method and paintComponent().
 class Starting extends JPanel
 {
 	private CardLayout cards; // holds card layout
 	private CardHolder panelHolder; // used to swap between panels in card layout
 	private Image background; // background image
-
+	
+	// Creates a class with 6 buttons, where 5 of them go to different 
+	// panels and one of them closes the program. Also creates labels
+	// which will serve as the title of the game
 	public Starting (CardLayout cardsIn, CardHolder panelHolderIn) 
 	{
 		cards = cardsIn;
@@ -163,6 +189,8 @@ class Starting extends JPanel
 
 	}
 	
+	// getImage() uses ImageIO to load the image into a variable.
+	/// Hrithik Mallireddy wrote this method.
 	public Image getImage(String fileName)
 	{
 		Image picture = null;
@@ -179,12 +207,17 @@ class Starting extends JPanel
 		return picture;
 	}
 	
+	// This method is drawing the image
+	/// Hrithik Mallireddy wrote this method.
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
 		g.drawImage(background, 0, 0, 750, 700, this);
 	}
 	
+	// Button Handler is the handler class for the six buttons on the
+	// home screen.
+	/// Prathik Kumar wrote this class.
 	class ButtonHandler extends JPanel implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -206,6 +239,11 @@ class Starting extends JPanel
 	}
 }
 
+// HomeBar 
+// Creates menu bar containing the menu items home and settings
+// In a sep class because it is more convenient to just call this class, and have the
+// menu bar in all the classes
+/// Prathik Kumar wrote this class.
 class HomeBar extends JPanel
 {
 	private CardLayout cards; //holds card layout
@@ -238,6 +276,8 @@ class HomeBar extends JPanel
 		add(menuPanel, BorderLayout.CENTER);
 	}
 	
+	// Used to check which menu item the user clicked
+	/// Prathik Kumar wrote this method.
 	class MenuHandler extends JPanel implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt) 
@@ -250,7 +290,9 @@ class HomeBar extends JPanel
 		}
 	}
 }
-
+// Creates a home button, used for convience so we can call this class
+// instead of having to make a new home button in every panel
+/// Prathik Kumar wrote this class
 class HomeButton extends JPanel
 {
 	private CardLayout cards; //holds card layout
@@ -272,6 +314,8 @@ class HomeButton extends JPanel
 		
 	}
 	
+	// Used to go to home panel if user clicked home button
+	/// Prathik Kumar wrote this method
 	class ButtonHandler extends JPanel implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -282,8 +326,13 @@ class HomeButton extends JPanel
 	}
 }
 
+// Class settings contains a slider determining font size, and radio buttons
+// determining which font the user can use
+/// Prathik Kumar wrote this class.
 class Setting extends JPanel
 {	
+	// Will have slider for font and let user pick between different font size, but for now
+	// it just has the heading and the menu bar
 	public Setting(CardLayout cardsIn, CardHolder panelHolderIn)
 	{
 		CardLayout cards = cardsIn;
@@ -302,12 +351,19 @@ class Setting extends JPanel
 	}
 }
 
+// Lessons class holding the perterite, present tense, imperfect, and vocab buttons
+// these buttons lead to different panels that contain text areas teaching different
+// concepts
+/// Prathik Kumar wrote this class.
 class Lessons extends JPanel
 {
 	private CardLayout cards; //holds card layout
 	private CardHolder panelHolder; //used to swap between panels in card layout
 	private HomeButton hButton; //used to store the home button obj, so homebutton can be added to this panel
 	
+	// This page holds four different buttons for now that lead to different subtopics of the 
+	// concept we are trying to teach. Each button leads to a different panel which
+	// will have info on the concept
 	public Lessons (CardLayout cardsIn, CardHolder panelHolderIn, HomeButton hButtonIn, HomeBar hBarIn)
 	{
 		setBackground(Color.YELLOW);
@@ -351,6 +407,8 @@ class Lessons extends JPanel
 		add(lessonButtons, BorderLayout.CENTER);
 	}
 	
+	// Handles the buttons, checks which button was clicked
+	/// Prathik Kumar wrote this method
 	class ButtonHandler extends JPanel implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -367,12 +425,15 @@ class Lessons extends JPanel
 		}
 	}
 }
-
+// This is a lesson panel that will hold a text area with the lesson info
+/// Prathik Kumar wrote this class
 class Vocab extends JPanel
 {
 	private CardLayout cards; //holds card layout
 	private CardHolder panelHolder; //used to swap between panels in card layout
 	
+	// Generic lesson page with a text area in the middle that has to be filled in later
+	// We have a back to lessons page button as well
 	public Vocab(CardLayout cardsIn, CardHolder panelHolderIn)
 	{
 		cards = cardsIn;
@@ -402,6 +463,8 @@ class Vocab extends JPanel
 		add(lesson, BorderLayout.SOUTH);
 	}
 	
+	// Checks if the lesson page button was clicked
+	/// Prathik Kumar wrote this method
 	class ButtonHandler extends JPanel implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -415,11 +478,16 @@ class Vocab extends JPanel
 	}
 }
 
+// This is a lesson panel that will hold a text area with the lesson info
+// Lesson is about the Preterite tense in spanish, we will show patterns needed for it
+/// Prathik Kumar wrote this class.
 class Preterite extends JPanel
 {
 	private CardLayout cards; //holds card layout
 	private CardHolder panelHolder; //used to swap between panels in card layout
 	
+	// Generic lesson page with a text area in the middle that has to be filled in later
+	// We have a back to lessons page button as well
 	public Preterite(CardLayout cardsIn, CardHolder panelHolderIn)
 	{
 		cards = cardsIn;
@@ -449,6 +517,8 @@ class Preterite extends JPanel
 		add(lesson, BorderLayout.SOUTH);
 	}
 	
+	// Checks if the lesson page button was clicked
+	/// Prathik Kumar wrote this method
 	class ButtonHandler extends JPanel implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -462,11 +532,16 @@ class Preterite extends JPanel
 	}
 }
 
+// This is a lesson panel that will hold a text area with the lesson info
+// Lesson is about Imperfect tense in spanish, we will show patterns needed for it
+/// Prathik Kumar wrote this class.
 class Imperfect extends JPanel
 {
 	private CardLayout cards; //holds card layout
 	private CardHolder panelHolder; //used to swap between panels in card layout
 	
+	// Generic lesson page with a text area in the middle that has to be filled in later
+	// We have a back to lessons page button as well
 	public Imperfect(CardLayout cardsIn, CardHolder panelHolderIn)
 	{
 		cards = cardsIn;
@@ -496,6 +571,8 @@ class Imperfect extends JPanel
 		add(lesson, BorderLayout.SOUTH);
 	}
 	
+	// Checks if the lesson page button was clicked
+	/// Prathik Kumar wrote this method
 	class ButtonHandler extends JPanel implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -509,11 +586,16 @@ class Imperfect extends JPanel
 	}
 }
 
+// This is a lesson panel that will hold a text area with the lesson info
+// Lesson is about Present tense in spanish, we will show patterns needed for it
+/// Prathik Kumar wrote this class.
 class Present extends JPanel
 {
 	private CardLayout cards; //holds card layout
 	private CardHolder panelHolder; //used to swap between panels in card layout
-
+	
+	// Generic lesson page with a text area in the middle that has to be filled in later
+	// We have a back to lessons page button as well
 	public Present(CardLayout cardsIn, CardHolder panelHolderIn)
 	{
 		cards = cardsIn;
@@ -543,6 +625,8 @@ class Present extends JPanel
 		add(lesson, BorderLayout.SOUTH);
 	}
 	
+	// Checks if the lesson page button was clicked
+	/// Prathik Kumar wrote this method
 	class ButtonHandler extends JPanel implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -556,8 +640,13 @@ class Present extends JPanel
 	}
 }
 
+// This class creates the Instructions panel.Instructions will use a getter and setter method (Information) 
+// to recieve the instructions the user will read before playing the game. 
+/// Prathik Kumar wrote this class.
 class Instructions extends JPanel
 {	
+	// Creating Instructions JLabel as a heading, creating text area that will hold
+	// instructions later, and adding menu bar
 	public Instructions(CardLayout cardsIn, CardHolder panelHolderIn)
 	{
 		CardLayout cards = cardsIn;
@@ -584,8 +673,14 @@ class Instructions extends JPanel
 	}
 }
 
+// This is the leaderboard panel that will display the text file
+// with all the leaderboard information. There is a JLabel with the title
+// of the panel.
+/// Prathik Kumar wrote this class.
 class Leader extends JPanel
 {	
+	// Creating JLabel called Leaderboard as a heading for the Leaderboard panel
+	// Also adding menu bar to panel
 	public Leader(CardLayout cardsIn, CardHolder panelHolderIn)
 	{
 		CardLayout cards = cardsIn;

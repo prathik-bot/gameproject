@@ -1,3 +1,13 @@
+// Prathik Kumar and Hrithik Mallireddy
+// 5/4/2023
+// Game.java (Explorador Español)
+// Working on:
+	// Week 2: Basic Start, Instructions, and Game panels with navigation CardLayout and null layout complete
+		// Navigation between panels are all working well, and we need to fill in the template we have laid out
+	// Hrithik was absent for most of Week 1 so Prathik did most of the program so far.
+// Practicing: ImageIO, Components(JButtons, MenuBar), and different layouts, like border,
+// grid, and flow layout. Practicing using handler classes as well
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -37,6 +47,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.util.Scanner;
+import java.awt.Dimension;
 
 class GamePanel extends JPanel implements KeyListener, MouseListener, ActionListener
 {
@@ -60,15 +71,15 @@ class GamePanel extends JPanel implements KeyListener, MouseListener, ActionList
 
     public int worldX, worldY;
 
-    final int originalTileSize = 16; //16x16, default map tile size
-    final int scale = 3; //We need to scale it for the tiles display with better resolution in the screen
-    private final int tileSize = originalTileSize * scale; //48x48 tile, after scaling
+    public final int originalTileSize = 16; //16x16, default map tile size
+    public final int scale = 3; //We need to scale it for the tiles display with better resolution in the screen
+    public final int tileSize = originalTileSize * scale; //48x48 tile, after scaling
     //Number of iles we can display on the screen both horizontally and vertically
-    private final int maxScreenCol = 16; //16 tiles horizontally
-    private final int maxScreenRow = 12; //12 tiles vertically
-    private final int screenWidth = tileSize * maxScreenCol; // 768 pixels
-    private final int screenHeight = tileSize * maxScreenRow; // 576 pixels
-    private int screenX, screenY;
+    public final int maxScreenCol = 16; //16 tiles horizontally
+    public final int maxScreenRow = 12; //12 tiles vertically
+    public final int screenWidth = tileSize * maxScreenCol; // 768 pixels
+    public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
+    public int screenX, screenY;
     private boolean leftChecker;
     private boolean upChecker;
     private boolean rightChecker;
@@ -97,6 +108,12 @@ class GamePanel extends JPanel implements KeyListener, MouseListener, ActionList
         spriteCounter = 0;
         direction = "";
 
+		setLayout(new BorderLayout());
+		JButton settings = new JButton();
+		JPanel buttone = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		buttone.add(settings);
+		add(buttone, BorderLayout.SOUTH);
+		
         CardLayout cards = cardsIn;
         CardHolder panelHolder = panelHolderIn;
 
@@ -112,14 +129,18 @@ class GamePanel extends JPanel implements KeyListener, MouseListener, ActionList
         boyRight1 = getImage("Player_Right1.png");
         boyRight2 = getImage("Player_Right2.png");
         character = boyUp2;
+        
+        Image boyUp3 = getImage("Player_Up3.png");
+        Image boyDown3 = getImage("Player_Down3.png");
 
         addKeyListener(this);
         addMouseListener(this);
+        
+        int downSwitcher = 0;
+        int upSwitcher = 0;
 
-        //Timer LOGIC
         timer = new Timer(250, new ActionListener(){
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Timer Started");
                 if (leftChecker)
                 {
                     character = boyLeft2;
@@ -168,7 +189,7 @@ class GamePanel extends JPanel implements KeyListener, MouseListener, ActionList
         Graphics2D g2 = (Graphics2D) g;
         tileM.draw(g2);//Draw tiles and the player first, not to hide character
         //g.drawImage(character, xPos, yPos, 100, 100, this); //Default Image
-        g2.drawImage(character, screenX, screenY, 48, 48, null); //Default Image
+        g2.drawImage(character, screenX, screenY, tileSize+20, tileSize+20, null); //Default Image
         g2.dispose();
 
     }
@@ -238,7 +259,6 @@ class GamePanel extends JPanel implements KeyListener, MouseListener, ActionList
         if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_UP ||
                 key == KeyEvent.VK_DOWN || key == KeyEvent.VK_LEFT)
         {
-            System.out.println(direction);
             if (direction.equals("left"))
             {
                 leftChecker = true;
@@ -336,7 +356,7 @@ class GamePanel extends JPanel implements KeyListener, MouseListener, ActionList
         if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_UP ||
                 key == KeyEvent.VK_DOWN || key == KeyEvent.VK_LEFT)
         {
-            System.out.println(direction);
+            //System.out.println(direction);
             if (direction.equals("left"))
             {
                 leftChecker = true;
@@ -370,7 +390,6 @@ class GamePanel extends JPanel implements KeyListener, MouseListener, ActionList
 
     public void mousePressed(MouseEvent me)
     {
-        System.out.println("/mousePressed");
         requestFocusInWindow();
     }
 
